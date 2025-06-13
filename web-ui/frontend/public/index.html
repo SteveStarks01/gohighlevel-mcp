@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <link rel="icon" href="%PUBLIC_URL%/favicon.ico" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#3b82f6" />
+    <meta name="description" content="GoHighLevel MCP AI Assistant - Comprehensive web-based interface for GoHighLevel CRM management" />
+    <link rel="apple-touch-icon" href="%PUBLIC_URL%/logo192.png" />
+    <link rel="manifest" href="%PUBLIC_URL%/manifest.json" />
+    
+    <!-- Preconnect to external domains for performance -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    
+    <!-- Inter font -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <title>GoHighLevel MCP AI Assistant</title>
+    
+    <!-- GoHighLevel marketplace app integration script -->
+    <script>
+      // This script handles communication with GoHighLevel when embedded as a marketplace app
+      window.addEventListener('message', function(event) {
+        // Verify origin for security
+        if (event.origin !== 'https://app.gohighlevel.com' && 
+            event.origin !== 'https://app.msgsndr.com') {
+          return;
+        }
+        
+        // Handle different message types from GoHighLevel
+        if (event.data.type === 'GHL_USER_DATA') {
+          // Store encrypted user data for authentication
+          localStorage.setItem('ghl_user_data', event.data.encryptedData);
+          
+          // Trigger authentication flow in React app
+          window.dispatchEvent(new CustomEvent('ghl-auth', {
+            detail: event.data
+          }));
+        }
+        
+        if (event.data.type === 'GHL_LOCATION_CHANGED') {
+          // Handle location changes
+          window.dispatchEvent(new CustomEvent('ghl-location-change', {
+            detail: event.data
+          }));
+        }
+      });
+      
+      // Notify parent frame that the app is ready
+      window.addEventListener('load', function() {
+        if (window.parent !== window) {
+          window.parent.postMessage({
+            type: 'GHL_APP_READY',
+            appId: 'ghl-mcp-assistant'
+          }, '*');
+        }
+      });
+    </script>
+  </head>
+  <body>
+    <noscript>You need to enable JavaScript to run this app.</noscript>
+    <div id="root"></div>
+  </body>
+</html>
