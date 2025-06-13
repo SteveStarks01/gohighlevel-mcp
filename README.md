@@ -1,4 +1,3 @@
-[![Automated Tests](https://github.com/basicmachines-co/open-ghl-mcp/actions/workflows/test.yml/badge.svg)](https://github.com/basicmachines-co/open-ghl-mcp/actions/workflows/test.yml)
 # GoHighLevel MCP Server
 
 A comprehensive Model Context Protocol (MCP) server that provides **complete integration** with the GoHighLevel API v2. This server enables AI assistants to interact with **all GoHighLevel functionality** through **115 production-ready tools** covering 100% of available API endpoints - from contact management and messaging to sales pipelines, calendar administration, product management, and payment processing.
