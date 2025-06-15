@@ -1,9 +1,10 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { Send, Bot, User, Loader2 } from 'lucide-react';
+import { Bot, Loader2 } from 'lucide-react';
 import { useWebSocket } from '../../hooks/useWebSocket';
 import ChatMessage from './ChatMessage';
 import TypingIndicator from './TypingIndicator';
 import SuggestedPrompts from './SuggestedPrompts';
+import { PromptInputBox } from '../ui/ai-prompt-box';
 
 interface Message {
   id: string;
@@ -16,10 +17,9 @@ interface Message {
 
 const ChatInterface: React.FC = () => {
   const [messages, setMessages] = useState<Message[]>([]);
-  const [inputValue, setInputValue] = useState('');
   const [isTyping, setIsTyping] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
-  const inputRef = useRef<HTMLInputElement>(null);
 
   // WebSocket connection
   const { sendMessage, isConnected } = useWebSocket({
@@ -55,47 +55,41 @@ const ChatInterface: React.FC = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   }, [messages, isTyping]);
 
-  // Focus input on mount
-  useEffect(() => {
-    inputRef.current?.focus();
-  }, []);
-
-  const handleSendMessage = () => {
-    if (!inputValue.trim() || !isConnected) return;
+  const handleSendMessage = (message: string) => {
+    if (!message.trim() || !isConnected) return;
 
     // Add user message to chat
     const userMessage: Message = {
       id: `msg_${Date.now()}`,
       type: 'user',
-      content: inputValue,
+      content: message,
       timestamp: new Date().toISOString(),
     };
 
     setMessages(prev => [...prev, userMessage]);
-    
+
     // Send message via WebSocket
     sendMessage({
       type: 'chat',
-      message: inputValue,
+      message: message,
       conversation_id: 'default',
     });
 
-    // Clear input and show typing indicator
-    setInputValue('');
+    // Show typing indicator
     setIsTyping(true);
-  };
-
-  const handleKeyPress = (e: React.KeyboardEvent) => {
-    if (e.key === 'Enter' && !e.shiftKey) {
-      e.preventDefault();
-      handleSendMessage();
-    }
+    setIsLoading(true);
   };
 
   const handleSuggestedPrompt = (prompt: string) => {
-    setInputValue(prompt);
-    inputRef.current?.focus();
+    handleSendMessage(prompt);
   };
+
+  // Update loading state when typing indicator changes
+  useEffect(() => {
+    if (!isTyping) {
+      setIsLoading(false);
+    }
+  }, [isTyping]);
 
   return (
     <div className="flex flex-col h-96">
@@ -142,50 +136,36 @@ const ChatInterface: React.FC = () => {
         <div ref={messagesEndRef} />
       </div>
 
-      {/* Input area */}
+      {/* AI Prompt Box Input */}
       <div className="border-t border-gray-200 p-4">
-        <div className="flex space-x-3">
-          <div className="flex-1">
-            <div className="relative">
-              <input
-                ref={inputRef}
-                type="text"
-                value={inputValue}
-                onChange={(e) => setInputValue(e.target.value)}
-                onKeyPress={handleKeyPress}
-                placeholder="Ask me anything about your GoHighLevel data..."
-                className="input pr-12"
-                disabled={!isConnected}
-              />
-              <button
-                onClick={handleSendMessage}
-                disabled={!inputValue.trim() || !isConnected}
-                className="absolute right-2 top-1/2 transform -translate-y-1/2 p-1.5 text-gray-400 hover:text-primary-600 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
-              >
-                <Send className="w-4 h-4" />
-              </button>
-            </div>
-          </div>
-        </div>
-        
+        <PromptInputBox
+          onSend={handleSendMessage}
+          placeholder="Ask me anything about your GoHighLevel data..."
+          isLoading={isLoading}
+          className="w-full"
+        />
+
         {/* Quick actions */}
         {messages.length > 0 && (
           <div className="mt-3 flex flex-wrap gap-2">
             <button
               onClick={() => handleSuggestedPrompt("Show me today's appointments")}
-              className="text-xs px-3 py-1 bg-gray-100 text-gray-700 rounded-full hover:bg-gray-200 transition-colors"
+              className="text-xs px-3 py-1 bg-gray-100 text-gray-700 rounded-full hover:bg-gray-200 transition-colors disabled:opacity-50"
+              disabled={isLoading}
             >
               Today's appointments
             </button>
             <button
               onClick={() => handleSuggestedPrompt("What's my pipeline looking like?")}
-              className="text-xs px-3 py-1 bg-gray-100 text-gray-700 rounded-full hover:bg-gray-200 transition-colors"
+              className="text-xs px-3 py-1 bg-gray-100 text-gray-700 rounded-full hover:bg-gray-200 transition-colors disabled:opacity-50"
+              disabled={isLoading}
             >
               Pipeline status
             </button>
             <button
               onClick={() => handleSuggestedPrompt("Show recent contacts")}
-              className="text-xs px-3 py-1 bg-gray-100 text-gray-700 rounded-full hover:bg-gray-200 transition-colors"
+              className="text-xs px-3 py-1 bg-gray-100 text-gray-700 rounded-full hover:bg-gray-200 transition-colors disabled:opacity-50"
+              disabled={isLoading}
             >
               Recent contacts
             </button>
