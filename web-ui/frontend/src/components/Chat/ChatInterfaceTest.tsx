@@ -9,9 +9,8 @@ const ChatInterfaceTest: React.FC = () => {
   const [messages, setMessages] = useState<string[]>([]);
   const [isLoading, setIsLoading] = useState(false);
 
-  const handleSendMessage = (message: string, files?: File[]) => {
+  const handleSendMessage = (message: string) => {
     console.log('Message sent:', message);
-    console.log('Files attached:', files);
     
     // Add message to list
     setMessages(prev => [...prev, message]);
@@ -72,11 +71,11 @@ const ChatInterfaceTest: React.FC = () => {
         <h3 className="font-semibold text-yellow-800 mb-2">Test Features:</h3>
         <ul className="text-sm text-yellow-700 space-y-1">
           <li>• Type a message and press Enter or click send</li>
-          <li>• Try the voice recording feature (microphone icon)</li>
-          <li>• Test file upload by clicking the paperclip icon</li>
-          <li>• Try the Search, Think, and Canvas mode toggles</li>
-          <li>• Test drag and drop image functionality</li>
+          <li>• Test auto-expanding textarea</li>
           <li>• Verify loading states and animations</li>
+          <li>• Test keyboard shortcuts (Enter to send, Shift+Enter for new line)</li>
+          <li>• Verify disabled state when loading</li>
+          <li>• Test empty message handling</li>
         </ul>
       </div>
     </div>

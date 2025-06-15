@@ -1,10 +1,10 @@
-# AI Prompt Box Integration
+# AI Prompt Box Integration - Simplified Version
 
-This document describes the integration of the Shadcn AI Prompt Box component into the GoHighLevel MCP Web UI.
+This document describes the integration of a simplified Shadcn AI Prompt Box component into the GoHighLevel MCP Web UI.
 
 ## 🎯 **Integration Overview**
 
-The AI Prompt Box component has been successfully integrated to replace the previous custom chat input interface while maintaining all existing functionality.
+The AI Prompt Box component has been successfully integrated and **simplified** to replace the previous custom chat input interface while maintaining all existing functionality. **Unsupported features have been removed** to focus on core chat functionality.
 
 ### ✅ **Completed Integration Features**
 
@@ -18,12 +18,13 @@ The AI Prompt Box component has been successfully integrated to replace the prev
 
 #### **Enhanced UI Features**
 - ✅ Modern, polished AI chat interface
-- ✅ File upload with drag-and-drop support
-- ✅ Voice recording capabilities
-- ✅ Search, Think, and Canvas mode toggles
-- ✅ Image preview and management
+- ✅ Auto-expanding textarea
+- ✅ Clean, minimal design
 - ✅ Responsive design with Tailwind CSS
 - ✅ TypeScript compatibility
+- ❌ File upload (removed - not supported yet)
+- ❌ Voice recording (removed - not supported yet)
+- ❌ Search, Think, Canvas modes (removed - not supported yet)
 
 #### **Theme Integration**
 - ✅ Updated color scheme to match GoHighLevel branding
@@ -58,7 +59,7 @@ const handleSendMessage = () => { /* ... */ };
 const [isLoading, setIsLoading] = useState(false);
 const handleSendMessage = (message: string) => { /* ... */ };
 
-// Component Usage
+// Component Usage - Simplified
 <PromptInputBox
   onSend={handleSendMessage}
   placeholder="Ask me anything about your GoHighLevel data..."
@@ -98,19 +99,19 @@ const handleSendMessage = (message: string) => {
 
 ## 🎨 **Features Overview**
 
-### **Enhanced Input Capabilities**
+### **Core Input Features**
 1. **Multi-line Text Input** - Auto-expanding textarea
-2. **File Upload** - Drag-and-drop image support
-3. **Voice Recording** - Built-in voice message functionality
-4. **Mode Toggles** - Search, Think, and Canvas modes
-5. **Smart Send Button** - Context-aware send/record/stop actions
-
-### **Advanced Features**
-1. **Image Preview** - Full-screen image viewing
-2. **File Management** - Easy file removal and preview
+2. **Smart Send Button** - Context-aware send button
 3. **Keyboard Shortcuts** - Enter to send, Shift+Enter for new line
 4. **Loading States** - Visual feedback during processing
-5. **Error Handling** - Graceful error states and recovery
+5. **Clean Design** - Minimal, focused interface
+
+### **Removed Features** (Not Supported Yet)
+1. ❌ **File Upload** - Image drag-and-drop support
+2. ❌ **Voice Recording** - Voice message functionality
+3. ❌ **Mode Toggles** - Search, Think, and Canvas modes
+4. ❌ **Image Preview** - Full-screen image viewing
+5. ❌ **File Management** - File removal and preview
 
 ### **Accessibility Features**
 1. **Screen Reader Support** - Proper ARIA labels
